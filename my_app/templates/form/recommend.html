@@ -1,0 +1,60 @@
+
+<!doctype html>
+
+<html lang="en">
+<head>
+
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700|Raleway" rel="stylesheet">
+  <link rel="stylesheet" href="../static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/open-iconic-bootstrap.min.css">
+  <link rel="stylesheet" href="../static/css/animate.css">
+
+  <link rel="stylesheet" href="../static/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="../static/css/owl.theme.default.min.css">
+  <link rel="stylesheet" href="../static/css/magnific-popup.css">
+
+  <link rel="stylesheet" href="../static/css/bootstrap-datepicker.css">
+  <link rel="stylesheet" href="../static/css/jquery.timepicker.css">
+
+
+
+  <link rel="stylesheet" href="../static/css/icomoon.css">
+  <link rel="stylesheet" href="../static/css/style.css">
+
+  <title>Recipe Recommender - DSI Final Capstone</title>
+
+  <meta name="description" content="Recipe Recommender">
+  <meta name="author" content="Katie Eloe">
+
+</head>
+
+<body>
+
+  <h2 class="navbar-brand">Base Recipe:</h2>
+  <p class="site-subheading-black" style="font-size: 20pt">{{ selection }}</p>
+  <h2 class="navbar-brand">RECOMMENDATIONS:</h2>
+  <table class='table'>
+    <tr style="background-color: gray; color: #fff; vertical-align: center">
+    {% for col in column_headers %}
+    <th>{{col}}</th>
+    {% endfor %}
+    </tr>
+    <tr>
+    {% for _, row in recs_df.iterrows() %}
+        {% for idx, entry in row.iteritems() %}
+	       {% if idx == 3 %}
+	       <td class="site-subheading-black"><img src = "{{entry}}" width = 250 height = 200></td>
+	       {% elif idx == 6 %}
+	       <td class="site-subheading-wide"><a href = "{{entry}}">Link to Recipe</a></td>
+      	 {% else %}
+	       <td class="site-subheading-black">{{ entry }}</td>
+	       {% endif %}
+        {% endfor %}
+    </tr>
+    {% endfor %}
+
+  </table>
+
+</body>
+</html>

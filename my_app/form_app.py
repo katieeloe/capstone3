@@ -5,19 +5,22 @@ import pprint
 import pandas as pd
 import numpy as np
 import sys
+import pickle
 
 
 app = Flask(__name__)
 
-def get_recs():
-    recs = []
-    client = MongoClient("localhost", 27017)
-    db = client.recipes
-    collection = db['recs_even_weights']
-    cursor = collection.find({})
-    for document in cursor:
-        recs.append(document['results'])
-    return pd.DataFrame(recs[0])
+all_recs_df = pd.read_pickle('static/recs.pkl')
+
+# def get_recs():
+#     recs = []
+#     client = MongoClient("localhost", 27017)
+#     db = client.recipes
+#     collection = db['recs_even_weights']
+#     cursor = collection.find({})
+#     for document in cursor:
+#         recs.append(document['results'])
+#     return pd.DataFrame(recs[0])
 
 def generate_preference_selection():
     return pd.Series(['Italian', 'Asian', 'Keto', 'Gluten-Free'])
@@ -61,7 +64,7 @@ def reccomend():
     """Recieve the recipe to base recommendation off and display recommendations to user.
     """
     selection = str(request.form['recipe'])
-    all_recs_df = get_recs()
+    #all_recs_df = get_recs()
     recs_df = all_recs_df[all_recs_df[1] == selection]
     recs_df = recs_df.iloc[:, 2:]
     column_headers = ['Recipe Name', 'Recipe Image', 'Paired Wines', 'Additional Pairing Info', 'Recipe URL']

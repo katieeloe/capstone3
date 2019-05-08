@@ -1,6 +1,7 @@
 import json
 import pandas as pd
 import numpy as np
+import pickle
 from multi_key_dict import multi_key_dict
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -60,7 +61,7 @@ def find_recommendations(cosine_similarities, recipes_json):
 
             results.append(rec)
 
-    return results
+    return pd.DataFrame(results)
 
 def load_mongo(table_name, results):
     client = MongoClient('localhost', 27017)
@@ -68,6 +69,9 @@ def load_mongo(table_name, results):
     doc_tab = db[table_name]
     post = {'results': results}
     db[table_name].insert_one(post)
+
+def pickle_recs(results_df):
+    return results_df.to_pickle('/home/katie/01-OneDrive/01_galvanize_dsi/capstones/03-capstone_3/capstone3/my_app/static/recs.pkl')
 
 if __name__ == "__main__":
     file_path = '/home/katie/01-OneDrive/01_galvanize_dsi/capstones/03-capstone_3/data/'
@@ -77,4 +81,6 @@ if __name__ == "__main__":
     features_df = vectorize_features(categorical_feat)
     cosine_similarities = compute_distances(features_df)
     results = find_recommendations(cosine_similarities, recipes_json)
+    pickle_recs(results)
+
     #load_mongo('recs_even_weights', results)
